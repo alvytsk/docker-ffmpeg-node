@@ -103,4 +103,4 @@ COPY --from=builder /opt/ffmpeg /opt/ffmpeg
 COPY --from=builder /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
 COPY --from=builder /usr/lib/librav1e.so.0 /usr/lib/librav1e.so.0
 
-CMD "/usr/local/bin/ffmpeg"; ["node", "--version"]
+# CMD "/usr/local/bin/ffmpeg"; ["node", "--version"]
