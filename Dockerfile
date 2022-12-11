@@ -1,4 +1,4 @@
-FROM alpine:3.16.0 as build
+FROM alpine:3.16.0 as builder
 
 ARG FFMPEG_VERSION=5.1
 
@@ -99,8 +99,8 @@ RUN apk add --update \
   x264-dev \
   x265-dev
 
-COPY --from=build /opt/ffmpeg /opt/ffmpeg
-COPY --from=build /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
-COPY --from=build /usr/lib/librav1e.so.0 /usr/lib/librav1e.so.0
+COPY --from=builder /opt/ffmpeg /opt/ffmpeg
+COPY --from=builder /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
+COPY --from=builder /usr/lib/librav1e.so.0 /usr/lib/librav1e.so.0
 
-CMD ["/usr/local/bin/ffmpeg"]
+CMD "/usr/local/bin/ffmpeg"; ["node", "--version"]
