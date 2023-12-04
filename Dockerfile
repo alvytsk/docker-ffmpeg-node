@@ -1,6 +1,9 @@
-FROM alpine:3.16.0 as builder
+ARG NODE_VERSION=20.10.0
+ARG ALPINE_VERSION=3.18.5
 
-ARG FFMPEG_VERSION=5.1
+FROM alpine:${ALPINE_VERSION} as builder
+
+ARG FFMPEG_VERSION=6.1
 
 ARG PREFIX=/opt/ffmpeg
 ARG LD_LIBRARY_PATH=/opt/ffmpeg/lib
@@ -80,7 +83,7 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 
 ##########################
 # Build the release image.
-FROM node:18-alpine3.16
+FROM node:${NODE_VERSION}-alpine
 ENV PATH=/opt/ffmpeg/bin:$PATH
 
 RUN apk add --update \
@@ -101,6 +104,16 @@ RUN apk add --update \
 
 COPY --from=builder /opt/ffmpeg /opt/ffmpeg
 COPY --from=builder /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
-COPY --from=builder /usr/lib/librav1e.so.0 /usr/lib/librav1e.so.0
+COPY --from=builder /usr/lib/librav1e.so.0.6 /usr/lib/librav1e.so.0.6
+COPY --from=builder /usr/lib/libxcb.so.1 /usr/lib/libxcb.so.1
+COPY --from=builder /usr/lib/libxcb-shm.so.0 /usr/lib/libxcb-shm.so.0
+COPY --from=builder /usr/lib/libxcb-shape.so.0 /usr/lib/libxcb-shape.so.0
+COPY --from=builder /usr/lib/libxcb-xfixes.so.0 /usr/lib/libxcb-xfixes.so.0
+COPY --from=builder /usr/lib/libmp3lame.so.0 /usr/lib/libmp3lame.so.0
+COPY --from=builder /usr/lib/libXau.so.6 /usr/lib/libXau.so.6
+COPY --from=builder /usr/lib/libXdmcp.so.6 /usr/lib/libXdmcp.so.6
+COPY --from=builder /usr/lib/libbsd.so.0 /usr/lib/libbsd.so.0
+COPY --from=builder /usr/lib/libmd.so.0 /usr/lib/libmd.so.0
+
 
 # CMD "/usr/local/bin/ffmpeg"; ["node", "--version"]
